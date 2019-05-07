@@ -1,13 +1,12 @@
 import React from 'react';
 import { getJSON } from 'jquery';
-import { pick } from 'lodash';
+import { pick, fromPairs } from 'lodash';
 import MainField from './MainField';
 
 const extractInformation = (results) => {
   const newListInfo = results.map(el => pick(el, ['artistName', 'trackName', 'primaryGenreName', 'collectionName', 'releaseDate']));
-  const newHistogramInfo = results.reduce((acc, { trackId, trackTimeMillis }) => (
-    { ...acc, [trackId]: Math.floor(trackTimeMillis / 1000) }
-  ), {});
+  const histoInfoPairs = results.map(el => [el.trackId, Math.floor(el.trackTimeMillis / 1000)]);
+  const newHistogramInfo = fromPairs(histoInfoPairs);
   return { newListInfo, newHistogramInfo };
 };
 
@@ -28,8 +27,9 @@ export default class App extends React.Component {
     const requestedTerm = `term=${inputText}`;
     const requestUrl = ['https://itunes.apple.com/search?media=music', requestedTerm, 'callback=?'].join('&');
     const { results } = await getJSON(requestUrl);
-    extractInformation(results);
     const { newListInfo, newHistogramInfo } = extractInformation(results);
+    // console.log(Object.values(newHistogramInfo) + 'new');
+    // console.log(Object.values(histogramInfo) + 'totall in memory');
     this.setState({
       inputText: '',
       listInfo: newListInfo,

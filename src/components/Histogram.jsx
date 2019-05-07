@@ -1,6 +1,7 @@
 import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import { max, isEmpty } from 'lodash';
 
 const getTooltipMessage = (songsAmount) => {
   const messages = {
@@ -12,12 +13,17 @@ const getTooltipMessage = (songsAmount) => {
 };
 
 const getHistoData = (histogramInfo) => {
+  if (isEmpty(histogramInfo)) {
+    return [];
+  }
   const values = Object.values(histogramInfo).reduce((acc, el) => {
     const frame = Math.floor(el / 33);
     const count = acc[frame] || 0;
     return { ...acc, [frame]: count + 1 };
   }, {});
-  return Object.keys(values).map(el => values[el]);
+  const maximumKey = max(Object.keys(values));
+  const emptyArray = [...Array(Number(maximumKey))];
+  return emptyArray.map((el, i) => values[i + 1] || 0);
 };
 
 const getOptions = data => ({
