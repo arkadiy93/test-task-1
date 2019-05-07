@@ -28,8 +28,6 @@ export default class App extends React.Component {
     const requestUrl = ['https://itunes.apple.com/search?media=music', requestedTerm, 'callback=?'].join('&');
     const { results } = await getJSON(requestUrl);
     const { newListInfo, newHistogramInfo } = extractInformation(results);
-    // console.log(Object.values(newHistogramInfo) + 'new');
-    // console.log(Object.values(histogramInfo) + 'totall in memory');
     this.setState({
       inputText: '',
       listInfo: newListInfo,

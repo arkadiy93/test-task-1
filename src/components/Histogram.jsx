@@ -17,12 +17,12 @@ const getHistoData = (histogramInfo) => {
     return [];
   }
   const values = Object.values(histogramInfo).reduce((acc, el) => {
-    const frame = Math.floor(el / 33);
-    const count = acc[frame] || 0;
-    return { ...acc, [frame]: count + 1 };
+    const timeframe = Math.floor(el / 33);
+    const count = acc[timeframe] || 0;
+    return { ...acc, [timeframe]: count + 1 };
   }, {});
-  const maximumKey = max(Object.keys(values));
-  const emptyArray = [...Array(Number(maximumKey))];
+  const maximumValueKey = max(Object.keys(values));
+  const emptyArray = [...Array(Number(maximumValueKey))];
   return emptyArray.map((el, i) => values[i + 1] || 0);
 };
 
